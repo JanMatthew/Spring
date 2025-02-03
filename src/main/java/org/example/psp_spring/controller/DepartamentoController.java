@@ -8,6 +8,9 @@ import org.example.psp_spring.service.DepartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/departamento")
@@ -15,6 +18,8 @@ public class DepartamentoController {
 
     @Autowired
     private DepartamentoService departamentoService;
+
+    Logger logger = Logger.getLogger(DepartamentoController.class.getName());
 
     @GetMapping
     private ResponseEntity<?> getAll() {
@@ -40,6 +45,14 @@ public class DepartamentoController {
             return ResponseEntity.ok(new Result.Error(e.getMessage()) {
             });
         }
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> procesarCSV(@RequestParam("file") MultipartFile file) {
+        logger.info("Recibida peticion de procesar CSV");
+
+        return ResponseEntity.ok(departamentoService.procesarCSV(file));
+
     }
 
 
